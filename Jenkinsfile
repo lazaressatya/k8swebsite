@@ -56,13 +56,15 @@ pipeline {
 
                     kubectl create namespace website --dry-run=client -o yaml | kubectl apply -f -
 
-                    kubectl apply -f deployment.yaml
-                    kubectl apply -f service.yaml
+                    kubectl apply -f deployment.yml
+                    kubectl apply -f service.yml
 
                     kubectl set image deployment/k8sstatic-web-deployment ^
                     k8sstatic-webs=%IMAGE_NAME%:%TAG% -n website
 
                     kubectl rollout status deployment/k8sstatic-web-deployment -n website
+
+                    minikube service k8sstatic-web-service -n website
                     '''
                 }
             }
