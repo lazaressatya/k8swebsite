@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8sstatic-web-deployment
+  namespace: website
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: k8sstatic-web
+  template:
+    metadata:
+      labels:
+        app: k8sstatic-web
+    spec:
+      containers:
+        - name: k8sstatic-webs
+          image: lazares/k8sstaticwebsite:v1.0
+          ports:
+            - containerPort: 80
+
+
+
