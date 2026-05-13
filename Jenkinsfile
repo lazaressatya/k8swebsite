@@ -64,7 +64,7 @@ pipeline {
 
                     kubectl rollout status deployment/k8sstatic-web-deployment -n website
 
-                    minikube service k8sstatic-web-service -n website
+                   
                     '''
                 }
             }
