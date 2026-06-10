@@ -1,23 +1,57 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: k8sstatic-web-deployment
-  namespace: website
+  name: node-api-deployment
+  namespace: production
+  labels:
+    app: node-api
+
 spec:
   replicas: 3
+
   selector:
     matchLabels:
-      app: k8sstatic-web
+      app: node-api
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+
   template:
     metadata:
       labels:
-        app: k8sstatic-web
+        app: node-api
+
     spec:
       containers:
-        - name: k8sstatic-webs
-          image: lazares/k8sstaticwebsite:v1.0
-          ports:
-            - containerPort: 80
+      - name: node-api
+        image: lazares/node-api:v1.0
+        imagePullPolicy: Always
 
+        ports:
+        - name: api-web
+          containerPort: 3000
 
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
 
+        livenessProbe:
+          httpGet:
+            path: /
+            port: api-web
+          initialDelaySeconds: 30
+          periodSeconds: 10
+
+        readinessProbe:
+          httpGet:
+            path: /
+            port: api-web
+          initialDelaySeconds: 10
+          periodSeconds: 5
